@@ -1,0 +1,8 @@
+*.db
+data.xlsx
+VALOR_PROMEDIO.xlsx
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
