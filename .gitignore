@@ -1,8 +1,12 @@
+# Base de datos local generada por el ETL
 *.db
-data.xlsx
+# Datos descargados del DANE (se pueden volver a descargar)
 VALOR_PROMEDIO.xlsx
+# Python
 __pycache__/
 *.pyc
 .venv/
 venv/
+# Secretos (nunca subir la URL de la base de datos)
 .env
+/data.xlsx

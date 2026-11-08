@@ -185,7 +185,7 @@ def panel(engine, productos):
 
 
 if __name__ == "__main__":
-    ruta = sys.argv[1] if len(sys.argv) > 1 else "data.xlsx"
+    ruta = sys.argv[1] if len(sys.argv) > 1 else "datos/sipsa_central_mayorista_2026.xlsx"
     engine = conectar()
     datos = transformar(extraer(ruta))
     cargar(engine, datos)

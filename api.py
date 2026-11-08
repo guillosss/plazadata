@@ -11,6 +11,7 @@ Ejecutar en local, desde esta carpeta (donde está sipsa.db):
 Con PostgreSQL (Render): definir la variable de entorno DATABASE_URL.
 """
 import os
+from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import List, Optional
 
@@ -20,6 +21,7 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy import create_engine, text
 
 BASE = Path(__file__).parent
+DATOS = BASE / "datos" / "sipsa_central_mayorista_2026.xlsx"
 CANASTA_DEFECTO = ["Papa capira", "Tomate chonto regional", "Cebolla cabezona blanca", "Aguacate Hass"]
 
 
@@ -33,7 +35,26 @@ def conectar():
 
 
 engine = conectar()
-app = FastAPI(title="PlazaData API", version="0.1")
+
+
+def _hay_datos():
+    try:
+        with engine.connect() as con:
+            return (con.execute(text("SELECT COUNT(*) FROM precio_semanal")).scalar() or 0) > 0
+    except Exception:
+        return False
+
+
+@asynccontextmanager
+async def lifespan(_app):
+    """Al iniciar: si la base está vacía, carga automáticamente los datos incluidos en /datos."""
+    if not _hay_datos() and DATOS.exists():
+        import etl_sipsa
+        etl_sipsa.cargar(engine, etl_sipsa.transformar(etl_sipsa.extraer(str(DATOS))))
+    yield
+
+
+app = FastAPI(title="PlazaData API", version="0.2", lifespan=lifespan)
 
 
 def _f(v):
