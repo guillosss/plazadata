@@ -27,7 +27,21 @@ Al iniciar, si la base está vacía, la API carga sola los datos de `datos/`. No
 4. Para actualizar los datos: reemplazar el Excel de `datos/` por el nuevo y reiniciar con la base vacía
    (o correr `python etl_sipsa.py archivo.xlsx` con `DATABASE_URL` apuntando a la base).
 
+## Actualizar los precios desde el servicio oficial del DANE
+El DANE publica un servicio web (SOAP) con los precios semanales. El script `actualizar_sipsa.py` lo consulta y carga
+las semanas nuevas, sin descargar Excel:
+
+    python -m pip install -r requirements-actualizar.txt
+    python actualizar_sipsa.py                  # usa DATABASE_URL, o sipsa.db si no existe
+    python actualizar_sipsa.py --guardar-json respuesta.json   # además guarda la respuesta cruda
+
+- Debe llamarse por https (con http el servidor redirige y la petición deja de ser SOAP).
+- La respuesta incluye todo el país (~66 MB); tarda unos minutos.
+- Es seguro repetirlo: no duplica filas.
+- Verificado en nov-2026: los 8.998 registros del Excel del tablero coinciden exactamente con los del servicio.
+- `.github/workflows/actualizar_datos.yml` permite ejecutarlo desde GitHub (a mano o programado cada sábado).
+
 ## Límites conocidos de esta versión
 - La canasta y las alertas se guardan en el navegador (sin cuenta de usuario).
 - Las alertas se muestran en el panel; el envío por correo no está implementado.
-- La carga de datos nuevos es manual.
+- La carga de datos nuevos se hace con un comando (`actualizar_sipsa.py`); aún no corre sola.
