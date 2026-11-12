@@ -1,0 +1,70 @@
+/* Estilos de PlazaData (archivo aparte: la CSP no permite estilos en línea) */
+  :root {
+    --verde:#1f7a4d; --verde-claro:#e6f2eb; --tinta:#1a1a1f; --gris:#6b7280; --linea:#e4e6ea;
+    --fondo:#f5f5f7; --rojo:#cc3a2e; --ambar:#fff5c7; --ambar-tinta:#735400; --minorista:#c2680a;
+  }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--fondo); font-family: Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; color:var(--tinta); }
+  .app { max-width: 430px; margin: 0 auto; min-height: 100vh; background:#fff; display:flex; flex-direction:column; }
+  header { display:flex; justify-content:space-between; align-items:center; padding:20px 20px 10px; padding-top:max(20px, env(safe-area-inset-top)); }
+  .logo { color:var(--verde); font-weight:700; font-size:20px; }
+  .accion { color:var(--gris); font-size:14px; background:none; border:0; cursor:pointer; padding:6px 0; }
+  main { flex:1; padding:6px 20px 96px; }
+  h1 { font-size:22px; margin:8px 0 4px; font-weight:600; }
+  h2 { font-size:14px; margin:18px 0 8px; font-weight:600; color:var(--tinta); }
+  .sub { color:var(--gris); font-size:13px; margin:0 0 12px; line-height:1.4; }
+  .aviso { background:var(--verde-claro); color:var(--verde); font-size:12px; font-weight:500; padding:7px 10px; border-radius:8px; margin-bottom:12px; line-height:1.4; }
+  .aviso.alerta { background:#fde8e6; color:var(--rojo); }
+  .aviso.ambar { background:var(--ambar); color:var(--ambar-tinta); }
+  table { width:100%; border-collapse:collapse; }
+  th { text-align:left; font-size:12px; color:var(--gris); font-weight:600; padding:6px 4px 8px; }
+  td { padding:13px 4px; border-bottom:1px solid var(--linea); font-size:14px; vertical-align:middle; }
+  tr.fila { cursor:pointer; }
+  tr.fila:hover { background:#fafafa; }
+  td.nombre { font-weight:500; }
+  td.num, th.num { white-space:nowrap; font-size:13px; }
+  .sube { color:var(--rojo); font-weight:600; } .baja { color:var(--verde); font-weight:600; } .igual { color:var(--gris); font-weight:600; }
+  .viejo { color:var(--gris); font-size:11px; display:block; font-weight:400; }
+  .btn { display:block; width:100%; padding:14px; border-radius:12px; border:0; background:var(--verde); color:#fff; font-size:15px; font-weight:600; cursor:pointer; margin-top:14px; }
+  .btn:disabled { background:#b9c4bd; cursor:not-allowed; }
+  .btn.borde { background:#fff; color:var(--verde); border:1.5px dashed var(--verde); }
+  .btn.suave { background:var(--fondo); color:var(--tinta); }
+  .seg { display:flex; gap:8px; margin:6px 0 12px; flex-wrap:wrap; }
+  .chip { padding:8px 14px; border-radius:20px; background:var(--fondo); color:var(--gris); font-size:13px; font-weight:600; border:0; cursor:pointer; }
+  .chip.act { background:var(--verde); color:#fff; }
+  .opcion { padding:9px 13px; border-radius:20px; background:#fff; color:var(--tinta); font-size:13px; font-weight:500; border:1.5px solid var(--linea); cursor:pointer; text-align:left; }
+  .opcion.sel { background:var(--verde-claro); border-color:var(--verde); color:var(--verde); font-weight:600; }
+  .opcion.sel::before { content:"✓ "; }
+  .grupo { display:flex; flex-wrap:wrap; gap:8px; }
+  .card { border:1px solid var(--linea); border-radius:12px; padding:8px; margin-bottom:12px; }
+  .leyenda { display:flex; gap:14px; flex-wrap:wrap; font-size:12px; color:var(--gris); margin:-4px 0 12px; }
+  .leyenda i { display:inline-block; width:18px; height:3px; border-radius:2px; vertical-align:middle; margin-right:6px; }
+  .stats { display:flex; gap:12px; margin-bottom:10px; }
+  .stat { flex:1; background:var(--fondo); border-radius:12px; padding:12px 14px; }
+  .stat small { color:var(--gris); font-size:12px; display:block; } .stat b { font-size:18px; }
+  .fila-alerta { display:flex; align-items:center; gap:10px; padding:12px 0; border-bottom:1px solid var(--linea); }
+  .fila-alerta .n { flex:1; font-size:14px; font-weight:500; }
+  .fila-alerta input[type=number] { width:64px; padding:8px; border:1px solid var(--linea); border-radius:8px; font-size:14px; }
+  .quitar { background:none; border:0; color:var(--gris); cursor:pointer; font-size:12px; text-decoration:underline; }
+  .sw { position:relative; width:44px; height:26px; flex:none; }
+  .sw input { opacity:0; width:0; height:0; }
+  .sw span { position:absolute; inset:0; background:#c9ccd1; border-radius:13px; cursor:pointer; transition:.15s; }
+  .sw span::before { content:""; position:absolute; width:20px; height:20px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.15s; }
+  .sw input:checked + span { background:var(--verde); } .sw input:checked + span::before { transform:translateX(18px); }
+  .campo { width:100%; padding:12px; border:1px solid var(--linea); border-radius:10px; font-size:14px; margin-top:8px; font-family:inherit; }
+  nav { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:430px; background:#fff; border-top:1px solid var(--linea); display:flex; padding:8px 12px calc(18px + env(safe-area-inset-bottom)); }
+  nav button { flex:1; background:none; border:0; padding:6px 0; color:var(--gris); font-size:13px; font-weight:500; cursor:pointer; border-top:3px solid transparent; }
+  nav button.act { color:var(--verde); font-weight:600; border-top-color:var(--verde); }
+  .pie { font-size:11px; color:var(--gris); margin-top:12px; line-height:1.5; }
+  .enlace { background:none; border:0; color:var(--verde); font-size:13px; font-weight:600; cursor:pointer; text-decoration:underline; padding:8px 0; }
+  .vacio { color:var(--gris); font-size:14px; padding:24px 0; text-align:center; }
+  .velo { position:fixed; inset:0; background:rgba(0,0,0,.45); display:flex; align-items:flex-end; justify-content:center; z-index:20; }
+  .hoja { background:#fff; width:100%; max-width:430px; border-radius:18px 18px 0 0; padding:20px 20px calc(24px + env(safe-area-inset-bottom)); }
+  .hoja h3 { margin:0 0 6px; font-size:18px; }
+  .hoja textarea { width:100%; min-height:110px; border:1px solid var(--linea); border-radius:10px; padding:12px; font-size:14px; font-family:inherit; resize:vertical; margin:10px 0 4px; }
+  .fila-btn { display:flex; gap:10px; }
+  .fila-btn .btn { margin-top:10px; }
+  .nota-comp { font-size:13px; line-height:1.5; background:var(--fondo); border-radius:12px; padding:12px 14px; margin-bottom:12px; }
+  .leyenda i.l-mayorista { background:#1f7a4d; } .leyenda i.l-minorista { background:#c2680a; }
+  .tenue { color:var(--gris); }
+  .oculto { display:none !important; }

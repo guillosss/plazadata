@@ -1,12 +1,17 @@
-# Base de datos local generada por el ETL
+# Base de datos local
 *.db
-# Datos descargados del DANE (se pueden volver a descargar)
-VALOR_PROMEDIO.xlsx
+# Secretos: nunca subir la URL de la base ni la clave de administrador
+.env
 # Python
 __pycache__/
 *.pyc
 .venv/
 venv/
-# Secretos (nunca subir la URL de la base de datos)
-.env
+.pytest_cache/
+# Archivos de trabajo y descargas grandes (la respuesta del DANE pesa ~66 MB)
 /data.xlsx
+VALOR_PROMEDIO.xlsx
+respuesta_dane.*
+respuesta*.json
+probar_dane*.py
+diagnostico*.py

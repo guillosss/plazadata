@@ -15,7 +15,13 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
+      - key: ENTORNO
+        value: produccion
+      - key: PROXY_HOPS
+        value: "1"   # verificar en los registros (ver README, sección Seguridad)
       - key: DATABASE_URL
         fromDatabase:
           name: plazadata-db
           property: connectionString
+      - key: ADMIN_KEY
+        generateValue: true   # Render genera una clave; verla en Environment y usarla en /admin

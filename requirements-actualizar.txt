@@ -1,2 +1,3 @@
-zeep
-lxml
+# Solo para actualizar los precios desde el servicio web del DANE (no las necesita el servidor web).
+zeep>=4.2,<5.0
+lxml>=5.0,<7.0

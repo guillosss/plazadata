@@ -2,242 +2,28 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PlazaData</title>
-<style>
-  :root {
-    --verde:#1f7a4d; --verde-claro:#e6f2eb; --tinta:#1a1a1f; --gris:#6b7280; --linea:#e4e6ea;
-    --fondo:#f5f5f7; --rojo:#cc3a2e; --ambar:#fff5c7; --ambar-tinta:#735400;
-  }
-  * { box-sizing: border-box; }
-  body { margin:0; background:var(--fondo); font-family: Inter, system-ui, -apple-system, "Segoe UI", Arial, sans-serif; color:var(--tinta); }
-  .app { max-width: 430px; margin: 0 auto; min-height: 100vh; background:#fff; display:flex; flex-direction:column; }
-  header { display:flex; justify-content:space-between; align-items:center; padding:20px 20px 10px; }
-  .logo { color:var(--verde); font-weight:700; font-size:20px; }
-  .accion { color:var(--gris); font-size:14px; background:none; border:0; cursor:pointer; }
-  main { flex:1; padding:6px 20px 90px; }
-  h1 { font-size:22px; margin:8px 0 4px; font-weight:600; }
-  .sub { color:var(--gris); font-size:13px; margin:0 0 12px; line-height:1.4; }
-  .aviso { background:var(--verde-claro); color:var(--verde); font-size:12px; font-weight:500; padding:7px 10px; border-radius:8px; margin-bottom:14px; }
-  .aviso.alerta { background:#fde8e6; color:var(--rojo); }
-  .aviso.ambar { background:var(--ambar); color:var(--ambar-tinta); }
-  table { width:100%; border-collapse:collapse; }
-  th { text-align:left; font-size:12px; color:var(--gris); font-weight:600; padding:6px 4px 8px; }
-  td { padding:13px 4px; border-bottom:1px solid var(--linea); font-size:14px; vertical-align:middle; }
-  tr.fila { cursor:pointer; }
-  tr.fila:hover { background:#fafafa; }
-  td.nombre { font-weight:500; }
-  td.num { white-space:nowrap; font-size:13px; }
-  th.num { white-space:nowrap; }
-  .sube { color:var(--rojo); font-weight:600; } .baja { color:var(--verde); font-weight:600; } .igual { color:var(--gris); font-weight:600; }
-  .viejo { color:var(--gris); font-size:11px; display:block; font-weight:400; }
-  .btn { display:block; width:100%; padding:14px; border-radius:12px; border:0; background:var(--verde); color:#fff; font-size:15px; font-weight:600; cursor:pointer; margin-top:14px; }
-  .btn.borde { background:#fff; color:var(--verde); border:1.5px dashed var(--verde); }
-  .chips { display:flex; gap:8px; margin:6px 0 12px; }
-  .chip { padding:8px 16px; border-radius:20px; background:var(--fondo); color:var(--gris); font-size:13px; font-weight:600; border:0; cursor:pointer; }
-  .chip.act { background:var(--verde); color:#fff; }
-  .card { border:1px solid var(--linea); border-radius:12px; padding:8px; margin-bottom:12px; }
-  .stats { display:flex; gap:12px; margin-bottom:10px; }
-  .stat { flex:1; background:var(--fondo); border-radius:12px; padding:12px 14px; }
-  .stat small { color:var(--gris); font-size:12px; display:block; } .stat b { font-size:18px; }
-  .fila-alerta { display:flex; align-items:center; gap:10px; padding:12px 0; border-bottom:1px solid var(--linea); }
-  .fila-alerta .n { flex:1; font-size:14px; font-weight:500; }
-  .fila-alerta input[type=number] { width:64px; padding:8px; border:1px solid var(--linea); border-radius:8px; font-size:14px; }
-  .quitar { background:none; border:0; color:var(--gris); cursor:pointer; font-size:12px; text-decoration:underline; }
-  .sw { position:relative; width:44px; height:26px; flex:none; }
-  .sw input { opacity:0; width:0; height:0; }
-  .sw span { position:absolute; inset:0; background:#c9ccd1; border-radius:13px; cursor:pointer; transition:.15s; }
-  .sw span::before { content:""; position:absolute; width:20px; height:20px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.15s; }
-  .sw input:checked + span { background:var(--verde); } .sw input:checked + span::before { transform:translateX(18px); }
-  .campo { width:100%; padding:12px; border:1px solid var(--linea); border-radius:10px; font-size:14px; margin-top:8px; }
-  nav { position:fixed; bottom:0; left:50%; transform:translateX(-50%); width:100%; max-width:430px; background:#fff; border-top:1px solid var(--linea); display:flex; padding:8px 12px 18px; }
-  nav button { flex:1; background:none; border:0; padding:6px 0; color:var(--gris); font-size:13px; font-weight:500; cursor:pointer; border-top:3px solid transparent; }
-  nav button.act { color:var(--verde); font-weight:600; border-top-color:var(--verde); }
-  .pie { font-size:11px; color:var(--gris); margin-top:12px; line-height:1.4; }
-  .vacio { color:var(--gris); font-size:14px; padding:24px 0; text-align:center; }
-</style>
+<meta name="theme-color" content="#1f7a4d">
+<meta name="description" content="Precios mayoristas y de plaza de los insumos de tu restaurante, con datos oficiales del DANE.">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" href="/static/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="PlazaData">
+<link rel="stylesheet" href="/static/app.css">
 </head>
 <body>
 <div class="app">
-  <header><span class="logo">PlazaData</span><button class="accion" id="btnTitulo">Mi canasta ▾</button></header>
+  <header><span class="logo">PlazaData</span><button class="accion" id="btnTitulo" aria-label="Editar mi canasta">Mi canasta ▾</button></header>
   <main id="contenido"><p class="vacio">Cargando…</p></main>
-  <nav>
+  <nav id="nav">
     <button data-vista="panel" class="act">Panel</button>
     <button data-vista="hist">Histórico</button>
     <button data-vista="alertas">Alertas</button>
   </nav>
 </div>
 
-<script>
-const CANASTA_DEFECTO = ["Papa capira", "Tomate chonto regional", "Cebolla cabezona blanca", "Aguacate Hass"];
-const $ = (s) => document.querySelector(s);
-const cop = (n) => "$ " + Math.round(n).toLocaleString("es-CO");
-const pct = (n) => n.toLocaleString("es-CO", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + "%";
-const fechaCorta = (iso) => { const [y, m, d] = iso.split("-"); return `${d}/${m}/${y}`; };
-const mesCorto = (iso) => { const [y, m, d] = iso.split("-"); return `${parseInt(d)} ${["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"][parseInt(m)-1]}`; };
-const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
-
-// Estado (la canasta y las alertas se guardan en este navegador; sin cuenta de usuario todavía)
-const guardar = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
-const leer = (k, def) => { try { const v = JSON.parse(localStorage.getItem(k)); return v ?? def; } catch (e) { return def; } };
-const estado = {
-  vista: "panel",
-  canasta: leer("pd_canasta", CANASTA_DEFECTO),
-  alertas: leer("pd_alertas", {}),           // { producto: { umbral: 5, activa: true } }
-  producto: null, semanas: 12, precios: [], opciones: [],
-};
-estado.producto = estado.canasta[0] || null;
-
-async function api(ruta) {
-  const r = await fetch(ruta);
-  if (!r.ok) throw new Error("Error " + r.status);
-  return r.json();
-}
-
-function tendencia(p) {
-  if (p.variacion_pct === null || p.variacion_pct === undefined) return '<span class="igual">–</span>';
-  const v = p.variacion_pct;
-  if (v > 0) return `<span class="sube">↑ ${pct(v)}</span>`;
-  if (v < 0) return `<span class="baja">↓ ${pct(Math.abs(v))}</span>`;
-  return `<span class="igual">→ ${pct(0)}</span>`;
-}
-function alertasActivas() {
-  return estado.precios.filter((p) => {
-    const a = estado.alertas[p.producto];
-    return p.disponible && !p.desactualizado && a && a.activa && a.umbral > 0 && p.variacion_pct !== null && Math.abs(p.variacion_pct) > a.umbral;
-  });
-}
-
-async function cargarPrecios() {
-  if (!estado.canasta.length) { estado.precios = []; return; }
-  const qs = estado.canasta.map((p) => "producto=" + encodeURIComponent(p)).join("&");
-  estado.precios = await api("/api/precios/ultimo?" + qs);
-}
-
-// ---------- Vistas
-function vistaPanel() {
-  const ok = estado.precios.filter((p) => p.disponible && !p.desactualizado);
-  const semana = ok.length ? fechaCorta(ok[0].fecha) : "";
-  let h = `<h1>Precios mayoristas</h1>
-    <p class="sub">SIPSA-DANE · Central Mayorista de Antioquia · COP/kg${semana ? " · Semana que termina el " + semana : ""}</p>
-    <div class="aviso">Fuente: DANE-SIPSA. Variación del precio promedio frente a la semana anterior.</div>`;
-  alertasActivas().forEach((p) => {
-    h += `<div class="aviso alerta">Alerta: ${esc(p.producto)} varió ${pct(p.variacion_pct)} (tu umbral: ${estado.alertas[p.producto].umbral}%)</div>`;
-  });
-  if (!estado.canasta.length) {
-    h += '<p class="vacio">Tu canasta está vacía. Agrega insumos para ver sus precios.</p>';
-  } else {
-    h += '<table><thead><tr><th>Insumo</th><th class="num">Mín.</th><th class="num">Máx.</th><th class="num">Tendencia</th></tr></thead><tbody>';
-    estado.precios.forEach((p) => {
-      if (!p.disponible) { h += `<tr><td class="nombre">${esc(p.producto)}</td><td colspan="3" class="igual">Sin datos</td></tr>`; return; }
-      const viejo = p.desactualizado ? `<span class="viejo">último dato: ${mesCorto(p.fecha)}</span>` : "";
-      h += `<tr class="fila" data-producto="${esc(p.producto)}"><td class="nombre">${esc(p.producto)}${viejo}</td>
-        <td class="num">${cop(p.minimo)}</td><td class="num">${cop(p.maximo)}</td><td class="num">${p.desactualizado ? '<span class="igual">–</span>' : tendencia(p)}</td></tr>`;
-    });
-    h += "</tbody></table>";
-  }
-  h += `<input class="campo" id="buscar" list="opciones" placeholder="Buscar insumo para agregar (ej. zanahoria)" autocomplete="off">
-    <datalist id="opciones"></datalist>
-    <button class="btn borde" id="btnAgregar">+ Agregar insumo a mi canasta</button>
-    <p class="pie">Toca un insumo para ver su histórico.</p>`;
-  $("#contenido").innerHTML = h;
-
-  $("#buscar").addEventListener("input", async (e) => {
-    const q = e.target.value.trim();
-    if (q.length < 2) return;
-    try { estado.opciones = await api("/api/productos?q=" + encodeURIComponent(q)); } catch (err) { return; }
-    $("#opciones").innerHTML = estado.opciones.map((o) => `<option value="${esc(o)}">`).join("");
-  });
-  $("#btnAgregar").addEventListener("click", async () => {
-    const v = $("#buscar").value.trim();
-    if (!v) return;
-    let lista = [];
-    try { lista = await api("/api/productos?q=" + encodeURIComponent(v) + "&limite=50"); } catch (err) {}
-    const exacto = lista.find((o) => o.toLowerCase() === v.toLowerCase());
-    if (!exacto) { alert("Elige un producto de la lista que aparece al escribir."); return; }
-    if (!estado.canasta.includes(exacto)) { estado.canasta.push(exacto); guardar("pd_canasta", estado.canasta); }
-    if (!estado.producto) estado.producto = exacto;
-    await cargarPrecios(); vistaPanel();
-  });
-  document.querySelectorAll("tr.fila").forEach((tr) => tr.addEventListener("click", () => { estado.producto = tr.dataset.producto; ir("hist"); }));
-}
-
-async function vistaHist() {
-  if (!estado.producto) { $("#contenido").innerHTML = '<p class="vacio">Agrega un insumo a tu canasta para ver su histórico.</p>'; return; }
-  $("#contenido").innerHTML = '<p class="vacio">Cargando…</p>';
-  let datos;
-  try { datos = await api("/api/precios/historico?producto=" + encodeURIComponent(estado.producto) + "&semanas=" + estado.semanas); }
-  catch (e) { $("#contenido").innerHTML = '<p class="vacio">No hay datos para este producto.</p>'; return; }
-  const ult = datos[datos.length - 1];
-  const prom = datos.map((d) => d.promedio), mn = Math.min(...prom), mx = Math.max(...prom);
-  const W = 334, H = 190, L = 12, R = 12, T = 28, B = 34, rango = (mx - mn) || 1;
-  const X = (i) => L + (datos.length === 1 ? 0 : i * (W - L - R) / (datos.length - 1));
-  const Y = (v) => T + (H - T - B) * (1 - (v - mn) / rango);
-  const puntos = datos.map((d, i) => `${X(i).toFixed(1)},${Y(d.promedio).toFixed(1)}`).join(" ");
-  const chips = [4, 8, 12].map((n) => `<button class="chip ${estado.semanas === n ? "act" : ""}" data-sem="${n}">${n} sem</button>`).join("");
-  $("#contenido").innerHTML = `<h1>${esc(estado.producto)}</h1>
-    <p class="sub">Histórico del precio promedio semanal · Central Mayorista de Antioquia · COP/kg</p>
-    <div class="aviso">Fuente: DANE-SIPSA · ${mesCorto(datos[0].fecha)} a ${mesCorto(ult.fecha)} de ${ult.fecha.slice(0, 4)}</div>
-    <div class="chips">${chips}</div>
-    <div class="card"><svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Precio promedio semanal de ${esc(estado.producto)}">
-      <line x1="${L}" x2="${W - R}" y1="${T}" y2="${T}" stroke="#e4e6ea"/><line x1="${L}" x2="${W - R}" y1="${H - B}" y2="${H - B}" stroke="#e4e6ea"/>
-      <text x="${L}" y="${T - 8}" font-size="10" fill="#6b7280">máx. ${cop(mx)}</text>
-      <text x="${W - R}" y="${H - B - 6}" font-size="10" fill="#6b7280" text-anchor="end">mín. ${cop(mn)}</text>
-      <polyline points="${puntos}" fill="none" stroke="#1f7a4d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="${X(datos.length - 1)}" cy="${Y(ult.promedio)}" r="5" fill="#1f7a4d" stroke="#fff" stroke-width="2"/>
-      <text x="${L}" y="${H - 12}" font-size="10" fill="#6b7280">${mesCorto(datos[0].fecha)}</text>
-      <text x="${W - R}" y="${H - 12}" font-size="10" fill="#6b7280" text-anchor="end">${mesCorto(ult.fecha)}</text>
-    </svg></div>
-    <div class="stats"><div class="stat"><small>Mín. vigente</small><b>${cop(ult.minimo)}</b></div><div class="stat"><small>Máx. vigente</small><b>${cop(ult.maximo)}</b></div></div>
-    <p class="sub">Último dato publicado: ${fechaCorta(ult.fecha)} · promedio ${cop(ult.promedio)}</p>
-    <button class="btn" id="btnAlerta">Crear alerta para este insumo</button>`;
-  document.querySelectorAll(".chip").forEach((b) => b.addEventListener("click", () => { estado.semanas = parseInt(b.dataset.sem); vistaHist(); }));
-  $("#btnAlerta").addEventListener("click", () => {
-    if (!estado.alertas[estado.producto]) { estado.alertas[estado.producto] = { umbral: 5, activa: true }; guardar("pd_alertas", estado.alertas); }
-    ir("alertas");
-  });
-}
-
-function vistaAlertas() {
-  let h = `<h1>Mis alertas</h1>
-    <p class="sub">Te avisamos cuando un insumo varíe más del porcentaje que definas frente a la semana anterior.</p>
-    <div class="aviso ambar">Por ahora las alertas se muestran en el panel. El envío por correo llegará en una siguiente versión.</div>`;
-  if (!estado.canasta.length) h += '<p class="vacio">Agrega insumos a tu canasta primero.</p>';
-  estado.canasta.forEach((n) => {
-    const a = estado.alertas[n] || { umbral: 5, activa: false };
-    h += `<div class="fila-alerta" data-n="${esc(n)}"><span class="n">${esc(n)}</span>
-      <input type="number" min="0.5" step="0.5" value="${a.umbral}" aria-label="Umbral en % para ${esc(n)}"> %
-      <label class="sw"><input type="checkbox" ${a.activa ? "checked" : ""}><span></span></label>
-      <button class="quitar">Quitar</button></div>`;
-  });
-  h += `<button class="btn" id="btnGuardar">Guardar alertas</button><p class="pie" id="msg"></p>`;
-  $("#contenido").innerHTML = h;
-  $("#btnGuardar").addEventListener("click", () => {
-    document.querySelectorAll(".fila-alerta").forEach((f) => {
-      const n = f.dataset.n;
-      estado.alertas[n] = { umbral: parseFloat(f.querySelector("input[type=number]").value) || 5, activa: f.querySelector("input[type=checkbox]").checked };
-    });
-    guardar("pd_alertas", estado.alertas);
-    $("#msg").textContent = "Alertas guardadas. Se evalúan con los precios de la última semana.";
-  });
-  document.querySelectorAll(".quitar").forEach((b) => b.addEventListener("click", async () => {
-    const n = b.closest(".fila-alerta").dataset.n;
-    estado.canasta = estado.canasta.filter((x) => x !== n); guardar("pd_canasta", estado.canasta);
-    if (estado.producto === n) estado.producto = estado.canasta[0] || null;
-    await cargarPrecios(); vistaAlertas();
-  }));
-}
-
-async function ir(vista) {
-  estado.vista = vista;
-  document.querySelectorAll("nav button").forEach((b) => b.classList.toggle("act", b.dataset.vista === vista));
-  if (vista === "panel") { try { await cargarPrecios(); vistaPanel(); } catch (e) { $("#contenido").innerHTML = '<p class="vacio">No se pudo cargar. ¿Está corriendo la API?</p>'; } }
-  else if (vista === "hist") vistaHist();
-  else vistaAlertas();
-}
-document.querySelectorAll("nav button").forEach((b) => b.addEventListener("click", () => ir(b.dataset.vista)));
-$("#btnTitulo").addEventListener("click", () => ir("alertas"));
-ir("panel");
-</script>
+<script src="/static/app.js" defer></script>
 </body>
 </html>

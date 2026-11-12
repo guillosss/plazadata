@@ -1,47 +1,61 @@
 # PlazaData MVP
 
-ETL + API + panel web con precios mayoristas del SIPSA-DANE (Central Mayorista de Antioquia).
-Fuente de los datos: DANE, SIPSA (información pública). Archivo incluido en `datos/`.
+Panel web para restaurantes con los precios del SIPSA-DANE de la **Central Mayorista** y la **Plaza Minorista «José María Villa»** de Medellín.
+Fuente de los datos: DANE, SIPSA (información pública).
 
 ## Correr en tu computador
-1. `python -m pip install -r requirements.txt`
-2. `python -m uvicorn api:app --reload`
-3. Abrir http://127.0.0.1:8000
+```
+python -m pip install -r requirements.txt
+python -m uvicorn api:app --reload
+```
+Abrir http://127.0.0.1:8000. Si la base está vacía, la aplicación carga sola `datos/sipsa_medellin.csv`.
+Si ya tenías un `sipsa.db` antiguo, bórralo y reinicia.
 
-Al iniciar, si la base está vacía, la API carga sola los datos de `datos/`. No hace falta correr el ETL a mano
-(también se puede: `python etl_sipsa.py datos/sipsa_central_mayorista_2026.xlsx`).
+## Pruebas
+```
+python -m pip install -r requirements-dev.txt
+python -m pytest -q
+```
+77 pruebas: reglas de dominio, validación de entradas, ETL, API y seguridad (inyección, límites, autenticación, cabeceras).
 
-## Rutas de la API
-- `GET /api/salud`                                   estado y última semana cargada
-- `GET /api/productos?q=papa`                        buscar productos
-- `GET /api/precios/ultimo?producto=A&producto=B`    mín, máx, promedio, variación semanal
-- `GET /api/precios/historico?producto=A&semanas=12` serie semanal
-- Documentación automática: `/docs`
+## Configuración (variables de entorno)
+Copia `.env.example` como `.env` para desarrollo. Nunca subas `.env`.
 
-## Publicar en Render (gratis)
-1. Subir este repositorio a GitHub (incluye `render.yaml`).
-2. En render.com: **New → Blueprint** → elegir el repositorio → **Apply**.
-3. Esperar a que termine el despliegue (unos minutos) y abrir la URL `https://plazadata-xxxx.onrender.com`.
-   - El servicio gratuito se duerme tras 15 minutos sin uso: la primera visita tarda hasta un minuto en despertar.
-   - La base gratuita expira a los 30 días de su creación: hacer copia (`pg_dump`) antes de esa fecha.
-4. Para actualizar los datos: reemplazar el Excel de `datos/` por el nuevo y reiniciar con la base vacía
-   (o correr `python etl_sipsa.py archivo.xlsx` con `DATABASE_URL` apuntando a la base).
+| Variable | Para qué | Por defecto |
+|---|---|---|
+| `DATABASE_URL` | Base de datos | `sqlite:///sipsa.db` |
+| `ADMIN_KEY` | Clave del resumen privado (mínimo 16 caracteres) | sin definir = desactivado |
+| `ENTORNO` | `produccion` oculta `/docs` | `desarrollo` |
+| `PROXY_HOPS` | Proxies de confianza delante de la app | `0` |
+| `ALLOWED_HOSTS` | Dominios permitidos, separados por comas | cualquiera |
+| `LOG_LEVEL` | Nivel de registro | `INFO` |
+
+Generar una clave: `python -c "import secrets; print(secrets.token_urlsafe(32))"`
+
+## Resultados de uso (indicadores del piloto)
+Abre `/admin` y escribe la clave. Muestra usuarios por semana, eventos y comentarios.
+La medición es anónima: un identificador aleatorio por navegador, sin nombre, correo ni IP.
 
 ## Actualizar los precios desde el servicio oficial del DANE
-El DANE publica un servicio web (SOAP) con los precios semanales. El script `actualizar_sipsa.py` lo consulta y carga
-las semanas nuevas, sin descargar Excel:
+```
+python -m pip install -r requirements-actualizar.txt
+python actualizar_sipsa.py
+```
+Carga ambos mercados, reintenta si el DANE falla y no duplica filas.
 
-    python -m pip install -r requirements-actualizar.txt
-    python actualizar_sipsa.py                  # usa DATABASE_URL, o sipsa.db si no existe
-    python actualizar_sipsa.py --guardar-json respuesta.json   # además guarda la respuesta cruda
+## Publicar en Render
+1. Subir el repositorio a GitHub (incluye `render.yaml`).
+2. En render.com: **New → Blueprint** → elegir el repositorio → **Apply**.
+3. La clave de administrador la genera Render: verla en el servicio → **Environment** → `ADMIN_KEY`.
+4. Verificar `PROXY_HOPS` como indica `docs/ARQUITECTURA_Y_SEGURIDAD.md`.
 
-- Debe llamarse por https (con http el servidor redirige y la petición deja de ser SOAP).
-- La respuesta incluye todo el país (~66 MB); tarda unos minutos.
-- Es seguro repetirlo: no duplica filas.
-- Verificado en nov-2026: los 8.998 registros del Excel del tablero coinciden exactamente con los del servicio.
-- `.github/workflows/actualizar_datos.yml` permite ejecutarlo desde GitHub (a mano o programado cada sábado).
+El servicio gratuito se duerme tras 15 minutos sin uso y la base gratuita expira a los 30 días.
 
-## Límites conocidos de esta versión
+## Arquitectura y seguridad
+Ver [`docs/ARQUITECTURA_Y_SEGURIDAD.md`](docs/ARQUITECTURA_Y_SEGURIDAD.md): capas, hallazgos de la revisión, correspondencia con OWASP Top 10, lo que no se implementó y los riesgos pendientes.
+
+## Límites conocidos
 - La canasta y las alertas se guardan en el navegador (sin cuenta de usuario).
 - Las alertas se muestran en el panel; el envío por correo no está implementado.
-- La carga de datos nuevos se hace con un comando (`actualizar_sipsa.py`); aún no corre sola.
+- La unidad de los huevos (por unidad) se infirió por la magnitud del precio; confirmar con el DANE.
+- Entre mercados, algunos productos tienen presentaciones distintas: comparar con cautela.
